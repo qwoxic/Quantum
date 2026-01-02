@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация - Quantum</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .register-container { width: 100%; max-width: 400px; background: white; padding: 30px 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .logo { text-align: center; font-size: 28px; font-weight: bold; margin-bottom: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .input-group { margin-bottom: 20px; }
+        input { width: 100%; padding: 16px; border: 2px solid #e1e5eb; border-radius: 10px; font-size: 16px; box-sizing: border-box; transition: all 0.3s ease; }
+        input:focus { border-color: #667eea; outline: none; box-shadow: 0 5px 15px rgba(102,126,234,0.1); }
+        .btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; font-weight: bold; transition: all 0.3s ease; }
+        .btn:active { transform: scale(0.98); }
+        .error { background: #ff4757; color: white; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: none; font-size: 14px; }
+        .links { text-align: center; margin-top: 20px; }
+        .links a { color: #667eea; text-decoration: none; font-weight: 500; font-size: 15px; }
+        .password-requirements { font-size: 12px; color: #6c757d; margin-top: 5px; text-align: left; padding: 0 5px; }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="logo">Quantum</div>
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        <form method="POST" id="registerForm">
+            <div class="input-group">
+                <input type="text" name="username" placeholder="Логин (минимум 3 символа)" required minlength="3" autocomplete="username">
+            </div>
+            <div class="input-group">
+                <input type="text" name="name" placeholder="Ваше имя" required autocomplete="name">
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Пароль (минимум 4 символа)" required minlength="4" autocomplete="new-password">
+                <div class="password-requirements">Минимум 4 символа</div>
+            </div>
+            <button type="submit" class="btn" id="submitBtn">Создать аккаунт</button>
+        </form>
+        <div class="links">
+            <a href="/login">Уже есть аккаунт?</a>
+        </div>
+    </div>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const password = document.querySelector('input[name="password"]').value;
+            const name = document.querySelector('input[name="name"]').value.trim();
+            const username = document.querySelector('input[name="username"]').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+            
+            if (password.length < 4) {
+                e.preventDefault();
+                alert('Пароль должен быть не менее 4 символов');
+                return false;
+            }
+            
+            if (!name) {
+                e.preventDefault();
+                alert('Введите ваше имя');
+                return false;
+            }
+
+            if (username.length < 3) {
+                e.preventDefault();
+                alert('Логин должен быть не менее 3 символов');
+                return false;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Создание...';
+            
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }, 3000);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const usernameInput = document.querySelector('input[name="username"]');
+            if (usernameInput) {
+                usernameInput.focus();
+            }
+        });
+    </script>
+</body>
+</html>
